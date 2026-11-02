@@ -1,0 +1,21 @@
+{
+  "name": "nqu-course-system",
+  "version": "1.0.0",
+  "description": "A National Quemoy University course information system demo built with Node.js built-in modules",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "nqu",
+    "course-system",
+    "education",
+    "nodejs"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,22 @@
+{
+  "name": "minicurl",
+  "version": "1.0.0",
+  "description": "A small curl-like HTTP client built with Node.js built-in modules",
+  "type": "module",
+  "bin": {
+    "minicurl": "bin/minicurl.js"
+  },
+  "scripts": {
+    "start": "node bin/minicurl.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "curl",
+    "http",
+    "cli"
+  ],
+  "license": "MIT"
+}

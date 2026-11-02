@@ -1,0 +1,23 @@
+{
+  "name": "safe-search",
+  "version": "1.0.0",
+  "description": "A preference-independent search demo that immediately offers care resources for self-harm related queries, built with Node.js built-in modules",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "search",
+    "tf-idf",
+    "non-personalized",
+    "safety",
+    "mental-health",
+    "nodejs"
+  ],
+  "license": "MIT"
+}

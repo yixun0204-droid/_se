@@ -1,0 +1,30 @@
+{
+  "name": "hw7-taskflow",
+  "version": "1.0.0",
+  "description": "TaskFlow demo app for HW7: server unit tests, Web API system tests, and Playwright E2E tests",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "test:unit": "node --test \"test/unit/*.test.js\"",
+    "test:system": "node --test \"test/system/*.test.js\"",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "testing",
+    "unit-test",
+    "system-test",
+    "e2e",
+    "playwright",
+    "nodejs"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
+  }
+}

@@ -1,0 +1,7 @@
+node_modules/
+data/e2e-tasks.json
+data/tasks.json
+test-results/
+playwright-report/
+blob-report/
+.playwright/

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="TaskFlow：HW7 單元測試、Web API 系統測試與 Playwright E2E 測試示範"
+    />
+    <title>TaskFlow · HW7 三層測試示範</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">HW7 · Software Testing</p>
+          <h1 data-testid="app-title">TaskFlow 任務流</h1>
+          <p class="hero-text">
+            一個可以實際操作的任務管理網站，用來示範伺服器單元測試、Web API
+            系統測試與 Playwright 無頭瀏覽器 E2E 測試。
+          </p>
+        </div>
+        <div class="hero-badges" aria-label="測試層級">
+          <span>Server Unit</span>
+          <span>Web API</span>
+          <span>Playwright E2E</span>
+        </div>
+      </header>
+
+      <section class="stats" aria-label="任務統計">
+        <article class="stat">
+          <span>全部任務</span>
+          <strong data-testid="stat-total">0</strong>
+        </article>
+        <article class="stat">
+          <span>待辦</span>
+          <strong data-testid="stat-todo">0</strong>
+        </article>
+        <article class="stat">
+          <span>進行中</span>
+          <strong data-testid="stat-doing">0</strong>
+        </article>
+        <article class="stat">
+          <span>已完成</span>
+          <strong data-testid="stat-done">0</strong>
+        </article>
+        <article class="stat accent">
+          <span>完成率</span>
+          <strong data-testid="stat-rate">0%</strong>
+        </article>
+      </section>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <div class="panel-heading">
+            <h2>新增任務</h2>
+            <p>建立後會立即寫入伺服器端資料檔。</p>
+          </div>
+
+          <form data-testid="task-form" novalidate>
+            <label class="field">
+              <span>標題</span>
+              <input
+                data-testid="title-input"
+                name="title"
+                type="text"
+                maxlength="120"
+                placeholder="例如：完成 HW7 測試報告"
+                autocomplete="off"
+              />
+            </label>
+
+            <label class="field">
+              <span>描述</span>
+              <textarea
+                data-testid="description-input"
+                name="description"
+                rows="3"
+                maxlength="1000"
+                placeholder="補充任務內容（選填）"
+              ></textarea>
+            </label>
+
+            <div class="form-row">
+              <label class="field">
+                <span>優先級</span>
+                <select data-testid="priority-select" name="priority">
+                  <option value="low">低</option>
+                  <option value="medium" selected>中</option>
+                  <option value="high">高</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>截止日</span>
+                <input data-testid="due-date-input" name="dueDate" type="date" />
+              </label>
+            </div>
+
+            <p class="form-error" data-testid="form-error" hidden></p>
+            <button class="button primary" type="submit" data-testid="submit-task">
+              新增任務
+            </button>
+          </form>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="toolbar">
+            <input
+              data-testid="search-input"
+              type="search"
+              placeholder="搜尋標題或描述"
+              aria-label="搜尋任務"
+              autocomplete="off"
+            />
+            <select data-testid="status-filter" aria-label="依狀態篩選">
+              <option value="">全部狀態</option>
+              <option value="todo">待辦</option>
+              <option value="doing">進行中</option>
+              <option value="done">已完成</option>
+            </select>
+            <select data-testid="priority-filter" aria-label="依優先級篩選">
+              <option value="">全部優先級</option>
+              <option value="low">低</option>
+              <option value="medium">中</option>
+              <option value="high">高</option>
+            </select>
+            <button class="button ghost" type="button" data-testid="refresh-tasks">
+              重新整理
+            </button>
+          </div>
+
+          <div data-testid="task-list" class="task-list"></div>
+          <p data-testid="empty-state" class="empty-state" hidden></p>
+        </section>
+      </main>
+
+      <footer>
+        <span>TaskFlow · Node.js + 原生 HTTP Server</span>
+        <span>Unit → System → E2E</span>
+      </footer>
+    </div>
+
+    <div data-testid="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

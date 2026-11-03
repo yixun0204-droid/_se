@@ -1,0 +1,15 @@
+[package]
+name = "rust-service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7.5"
+tokio = { version = "1.39.2", features = ["full"] }
+serde = { version = "1.0.204", features = ["derive"] }
+serde_json = "1.0.120"
+sqlx = { version = "0.7.4", features = ["runtime-tokio-rustls", "postgres", "chrono"] }
+chrono = { version = "0.4.38", features = ["serde"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["fmt"] }
+tower-http = { version = "0.5.2", features = ["trace"] }

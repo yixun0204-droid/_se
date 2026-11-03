@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HW6 Docker 微服務系統展示</title>
+  <style>
+    :root {
+      --bg: #0f1026;
+      --card: #1d1f3d;
+      --text: #f4f4f9;
+      --sub: #b8b8d1;
+      --ok: #3fb984;
+      --err: #f25f5c;
+      --accent: #7f9bff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #26285c, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--sub);
+    }
+
+    main {
+      display: grid;
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(127, 155, 255, 0.18) 0%, var(--card) 100%);
+      border: 1px solid rgba(127, 155, 255, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 40px 60px -40px rgba(127, 155, 255, 0.8);
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 1.6rem 0.8rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.4rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 999px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.9rem;
+      background: rgba(63, 185, 132, 0.25);
+      color: var(--ok);
+    }
+
+    .badge.error {
+      background: rgba(242, 95, 92, 0.25);
+      color: var(--err);
+    }
+
+    .badge.pending {
+      background: rgba(184, 184, 209, 0.25);
+      color: var(--sub);
+    }
+
+    .card-body {
+      display: grid;
+      gap: 0.8rem;
+      padding: 0 1.6rem 1.6rem;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      color: var(--sub);
+    }
+
+    .row strong {
+      color: var(--text);
+      text-align: right;
+    }
+
+    .stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid rgba(184, 184, 209, 0.3);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 1.2rem 1.6rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 0 1.6rem 1.6rem;
+    }
+
+    .pill {
+      border-radius: 12px;
+      border: 1px solid rgba(127, 155, 255, 0.4);
+      padding: 1rem 1.2rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .pill span {
+      color: var(--sub);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem 1rem 2rem;
+      color: var(--sub);
+    }
+
+    pre {
+      background: rgba(15, 16, 38, 0.8);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      color: var(--sub);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Docker 微服務系統展示</h1>
+    <p>nginx · PostgreSQL · Node.js · Rust · Python</p>
+  </header>
+  <main>
+    <section class="grid">
+      <article class="card" data-endpoint="/api/node/health">
+        <div class="card-header">
+          <h2>Node.js Service</h2>
+          <span class="badge pending">檢查中...</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <span>Runtime</span>
+            <strong class="runtime">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Connected</span>
+            <strong class="db">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Server Time</span>
+            <strong class="time">-</strong>
+          </div>
+          <div class="row">
+            <span>service_status 筆數</span>
+            <strong class="count">-</strong>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-endpoint="/api/rust/health">
+        <div class="card-header">
+          <h2>Rust Service</h2>
+          <span class="badge pending">檢查中...</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <span>Runtime</span>
+            <strong class="runtime">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Connected</span>
+            <strong class="db">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Server Time</span>
+            <strong class="time">-</strong>
+          </div>
+          <div class="row">
+            <span>service_status 筆數</span>
+            <strong class="count">-</strong>
+          </div>
+        </div>
+      </article>
+      <article class="card" data-endpoint="/api/python/health">
+        <div class="card-header">
+          <h2>Python Service</h2>
+          <span class="badge pending">檢查中...</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <span>Runtime</span>
+            <strong class="runtime">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Connected</span>
+            <strong class="db">-</strong>
+          </div>
+          <div class="row">
+            <span>DB Server Time</span>
+            <strong class="time">-</strong>
+          </div>
+          <div class="row">
+            <span>service_status 筆數</span>
+            <strong class="count">-</strong>
+          </div>
+        </div>
+      </article>
+    </section>
+    <section class="stack">
+      <article class="panel">
+        <div class="panel-header">
+          <div>
+            <h2>Docker 元件一覽</h2>
+            <p style="color: var(--sub);">本系統透過 docker-compose.yml 統一編排</p>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="pill">
+            <strong>nginx</strong>
+            <span>Web Server / Reverse Proxy（:80）</span>
+          </div>
+          <div class="pill">
+            <strong>postgres</strong>
+            <span>PostgreSQL 16（:5432，Volume 持久化）</span>
+          </div>
+          <div class="pill">
+            <strong>node-service</strong>
+            <span>Node.js + Express（內部 :3000）</span>
+          </div>
+          <div class="pill">
+            <strong>rust-service</strong>
+            <span>Rust + Axum + SQLx（內部 :8080）</span>
+          </div>
+          <div class="pill">
+            <strong>python-service</strong>
+            <span>Python + FastAPI（內部 :8000）</span>
+          </div>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-header">
+          <h2>原始回應（除錯用）</h2>
+        </div>
+        <div style="padding: 0 1.6rem 1.6rem; display: grid; gap: 1rem;">
+          <pre id="raw-node">等待 Node.js 回應...</pre>
+          <pre id="raw-rust">等待 Rust 回應...</pre>
+          <pre id="raw-python">等待 Python 回應...</pre>
+        </div>
+      </article>
+    </section>
+  </main>
+  <footer>
+    HW6 - 現代軟體工程 | Docker 微服務實作
+  </footer>
+  <script>
+    const cards = document.querySelectorAll(".card");
+    cards.forEach((card) => {
+      const endpoint = card.dataset.endpoint;
+      const badge = card.querySelector(".badge");
+      const runtime = card.querySelector(".runtime");
+      const db = card.querySelector(".db");
+      const time = card.querySelector(".time");
+      const count = card.querySelector(".count");
+      const rawId = endpoint.includes("node") ? "raw-node" : endpoint.includes("rust") ? "raw-rust" : "raw-python";
+      const raw = document.getElementById(rawId);
+
+      fetch(endpoint)
+        .then((res) => res.json())
+        .then((data) => {
+          raw.textContent = JSON.stringify(data, null, 2);
+          runtime.textContent = data.runtime || "-";
+          db.textContent = data.db_connected ? "true" : "false";
+          time.textContent = data.server_time || "-";
+          count.textContent = data.service_status_count ?? "-";
+          badge.textContent = data.status === "ok" ? "正常運作" : "異常";
+          badge.classList.remove("pending");
+          badge.classList.toggle("error", data.status !== "ok");
+        })
+        .catch((err) => {
+          raw.textContent = err.toString();
+          badge.textContent = "連線失敗";
+          badge.classList.remove("pending");
+          badge.classList.add("error");
+        });
+    });
+  </script>
+</body>
+
+</html>

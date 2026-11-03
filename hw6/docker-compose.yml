@@ -1,0 +1,98 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: hw6-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: se_user
+      POSTGRES_PASSWORD: se_pass
+      POSTGRES_DB: hw6_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U se_user -d hw6_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  node-service:
+    build:
+      context: ./node-service
+      dockerfile: Dockerfile
+    container_name: hw6-node
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: se_user
+      DB_PASSWORD: se_pass
+      DB_NAME: hw6_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-net
+
+  rust-service:
+    build:
+      context: ./rust-service
+      dockerfile: Dockerfile
+    container_name: hw6-rust
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://se_user:se_pass@db:5432/hw6_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-net
+
+  python-service:
+    build:
+      context: ./python-service
+      dockerfile: Dockerfile
+    container_name: hw6-python
+    restart: unless-stopped
+    environment:
+      PORT: 8000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: se_user
+      DB_PASSWORD: se_pass
+      DB_NAME: hw6_db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-net
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: hw6-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - node-service
+      - rust-service
+      - python-service
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+    networks:
+      - app-net
+
+volumes:
+  postgres_data:
+
+networks:
+  app-net:
+    driver: bridge

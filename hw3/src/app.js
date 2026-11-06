@@ -17,17 +17,22 @@ import { registerSearchRoutes } from './routes/search.js';
 import { buildIndex } from './search/index.js';
 import { errorPage } from './views/errors.js';
 
-const BASE_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PUBLIC_DIR = path.join(BASE_DIR, 'public');
-const DEFAULT_DOCUMENTS_PATH = path.join(BASE_DIR, 'data', 'documents.json');
+function moduleBaseDir() {
+  try {
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+  } catch {
+    return process.cwd();
+  }
+}
 
-export function createApp({
-  documents,
-  documentsPath = DEFAULT_DOCUMENTS_PATH,
-  publicDir = PUBLIC_DIR,
-} = {}) {
+export function createApp({ documents, documentsPath, publicDir } = {}) {
+  const baseDir = moduleBaseDir();
+  const resolvedPublicDir = publicDir ?? path.join(baseDir, 'public');
+  const resolvedDocumentsPath =
+    documentsPath ?? path.join(baseDir, 'data', 'documents.json');
+
   const loadedDocuments =
-    documents ?? JSON.parse(fs.readFileSync(documentsPath, 'utf8'));
+    documents ?? JSON.parse(fs.readFileSync(resolvedDocumentsPath, 'utf8'));
 
   if (!Array.isArray(loadedDocuments)) {
     throw new Error('documents 必須是陣列');
@@ -35,7 +40,7 @@ export function createApp({
 
   const index = buildIndex(loadedDocuments);
   const router = createRouter();
-  const deps = { index, documents: loadedDocuments, publicDir };
+  const deps = { index, documents: loadedDocuments, publicDir: resolvedPublicDir };
 
   registerSearchRoutes(router, deps);
   registerPageRoutes(router, deps);
@@ -47,7 +52,7 @@ export function createApp({
       const url = new URL(req.url ?? '/', `http://${req.headers.host ?? 'localhost'}`);
 
       if (url.pathname.startsWith('/static/')) {
-        if (serveStatic(res, publicDir, url.pathname)) return;
+        if (serveStatic(res, resolvedPublicDir, url.pathname)) return;
         sendHtml(
           res,
           errorPage({
